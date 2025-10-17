@@ -6,8 +6,9 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_executable(DemoChatServer main.cpp
-    source/namedpipehandler.h source/namedpipehandler.cpp
+    source/pipeserver.h source/pipeserver.cpp
     source/messageutils.cpp source/messageutils.h
+    source/pipeclient.cpp source/pipeclient.h
 )
 
 include(GNUInstallDirs)

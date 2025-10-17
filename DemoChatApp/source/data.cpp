@@ -5,8 +5,14 @@
 
 constexpr LPCWSTR pipeName = L"\\\\.\\pipe\\MyNamedPipe";
 
-Data::Data(QObject *parent) : QObject{parent}
+Data::Data(QObject *parent): QObject{parent}
 {
+    hEvent = CreateEvent( NULL, TRUE, FALSE, NULL);
+}
+
+Data::~Data()
+{
+    workerThread.exit();
 }
 
 QString Data::message() const
@@ -23,12 +29,30 @@ void Data::setMessage(const QString &msg)
     emit messageChanged();
 }
 
-void Data::callSendMessage()
+void Data::callSendMessage(QString numberID)
 {
-    pipeClient pipe(pipeName);
-    std::string message = "";
-    if(pipe.pingServer(message))
-        setMessage(QString::fromStdString(message));
+    pipeClient client(pipeName);
+    std::string strNumberID = numberID.toStdString();
 
-    qDebug() << "Message from QML:" << QString::fromStdString(message);
+    m_pipeApp = pipeName + numberID.toStdWString();
+
+    moveToThread(&workerThread);
+    connect(&workerThread, SIGNAL(started()), this, SLOT(runThread()));
+    workerThread.start();
+
+    QThread::msleep(1000);
+
+    if(client.pingServer(strNumberID))
+        return;
+
+    DWORD dwWait = WaitForSingleObject(hEvent, INFINITE);
+    qDebug() << "event: " << m_pipeApp;
+    setMessage(QString::fromStdString("aaa"));
+}
+
+void Data::runThread()
+{
+    m_Server = std::make_shared<pipeServer>(m_pipeApp.c_str());
+    if(m_Server->create())
+        m_Server->waitPipeEvent(hEvent);
 }

@@ -31,6 +31,8 @@ qt_add_qml_module(appDemoChatApp
         QML_FILES
         QML_FILES qml/DeButton.qml
         QML_FILES qml/DeTextBox.qml
+        SOURCES
+        SOURCES ../DemoChatServer/source/pipeserver.cpp ../DemoChatServer/source/pipeserver.h
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

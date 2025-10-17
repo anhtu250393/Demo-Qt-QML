@@ -10,7 +10,7 @@ Rectangle {
     TextInput {
         id: chat
         anchors.centerIn: parent
-        text: "Input here"
+        text: "Input"
         onAccepted: {
             console.log("Input received:", text);
         }

@@ -2,12 +2,14 @@
 #define PIPECLIENT_H
 
 #include <windows.h>
+#include <string>
+
 class pipeClient
 {
 public:
     pipeClient(LPCWSTR pipeName);
 
-    bool pingServer(std::string& messageReceive);
+    bool pingServer(const std::string& messageSend);
 private:
     HANDLE m_hPipe;
 };

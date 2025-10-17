@@ -21,12 +21,13 @@ Rectangle {
         MouseArea {
             anchors.fill: parent
             onClicked: {
-                applicationData.callSendMessage()
+                applicationData.callSendMessage(numberID.text)
             }
         }
     }
 
     DeTextBox {
+        id: numberID
         anchors.left: pingButton.right
         width: parent.width / 2
         height: 30
